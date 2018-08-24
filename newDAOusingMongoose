@@ -1,0 +1,137 @@
+model Schema
+=============
+
+const mongoose = require("mongoose");
+mongoose.connect("mongodb://localhost:27017/linkedin");
+
+const userSchema = mongoose.Schema({
+  _id: mongoose.Schema.Types.ObjectId,
+  userName: String,
+  name: String,
+  email: String,
+  mobile: String,
+  gender: String,
+  dateOfBirth: Date,
+  isVerified: Boolean,
+  isLoggedIn: Boolean,
+  isDeleted: Boolean,
+  profile: {
+    bio: String,
+    image: String,
+    experience: [
+      {
+        designation: String,
+        companyName: String,
+        timePeriod: String
+      }
+    ],
+    education: [
+      {
+        degreeName: String,
+        university: String,
+        percentage: String,
+        yearOfPassing: Number
+      }
+    ],
+    accomplishment: {
+      certifications: [
+        {
+          name: String,
+          issuedBy: String,
+          year: String
+        }
+      ],
+      awards: [
+        {
+          name: String,
+          awardedBy: String,
+          year: String
+        }
+      ],
+      publications: [
+        {
+          name: String,
+          topic: String,
+          publishedBy: String,
+          year: String
+        }
+      ]
+    },
+    skills: [String],
+    endorsements: [
+      {
+        endorsedBy: String,
+        comment: String
+      }
+    ]
+  },
+  posts: [
+    {
+      postId: String,
+      content: String,
+      //postImage: '(file)',
+      timestamp: Date,
+      likes: [
+        {
+          likedBy: String,
+          timestamp: Date
+        }
+      ],
+      comments: [
+        {
+          commentBy: String,
+          content: String,
+          timestamp: Date
+        }
+      ]
+    }
+  ],
+  blocklist: {
+    blocked: [String],
+    blockedBy: [String]
+  },
+  connectionRequests: {
+    sent: [String],
+    receive: [String]
+  },
+  connections: [String],
+  followings: [String],
+  followingCompany: [String],
+  followers: [String]
+});
+
+module.exports = mongoose.model("User", userSchema, "user");
+
+====================================================================
+
+DAO layer
+-----------------
+
+const mongoose = require("mongoose");
+const User = require("./user.js");              //schema is in user.js file
+
+var getUserById = function(objFind) {
+  var result = User.find(objFind);
+  return result;                                       //returns promise
+};
+
+====================================================================
+
+Controller layer
+------------------
+const call = require("./mongooseDemo");                   //where dao is kept..
+
+var callQuery = function(userName) {
+  var objQuery = '{"userName":"' + userName + '"}';
+  var query = call(JSON.parse(objQuery));
+  query.exec(function(err, jedis) {
+    if (err) return console.log(err);
+    jedis.forEach(function(jedi) {
+      console.log(jedi);
+    });
+  });
+};
+
+var x = (function() {
+    callQuery("dip95");
+})();
