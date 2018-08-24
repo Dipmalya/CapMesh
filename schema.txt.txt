@@ -1,0 +1,72 @@
+//Show accomplishment
+db.demo.find({"userName":"dip95"},{"profile.accomplishment.certifications":1}).pretty();
+
+//Add Accomplishment->certifications
+db.demo.update({"userName":"dip95"},{$push: {"profile.accomplishment.certifications": 
+        {$each: [ 
+            { "name": 5,  "issuedBy": 8, "year":"2017" }, 
+            { "name": 6,  "issuedBy": 7, "year":"2016" }, 
+            { "name": 7,  "issuedBy": 6, "year":"2015" } ],        
+       }
+     }
+   }
+)
+
+//Add Accomplishment->Awards
+db.demo.update({"userName":"dip95"},{$push: {"profile.accomplishment.awards": 
+        {$each: [ 
+            { "name": 5, "awardedBy": 8, "year":"2018" }, 
+            {"name": 6, "awardedBy": 7, "year":"2018" }, 
+            { "name": 7, "awardedBy": 6, "year":"2017" } ],         
+       }
+     }
+   }
+)
+
+
+//Add Accomplishment->Publications
+db.demo.update({"userName":"dip95"},{$push: {"profile.accomplishment.publications": 
+        { $each: [ 
+            { "name": 5, "topic": 8,"publishedBy":"LPU", "year":"2015" },
+             {"name": 6, "topic": 7,"publishedBy":"MAKAUT", "year":"2016" }, 
+             { "name": 7, "topic": 6,"publishedBy":"IIT", "year":"2017" } ],
+        }
+     }
+   }
+)
+
+
+//Update Accomplishment -> Awards->Name
+db.demo.update( {"userName":"dip95","profile.accomplishment.awards.name":"Oracle"},{$set:{"profile.accomplishment.awards.$.name":"KAMu"}},{"upsert":true})
+//Update Accomplishment -> Awards->Awarded_by
+db.demo.update( {"userName":"dip95","profile.accomplishment.awards.awardedBy":"Oracle"},{$set:{"profile.accomplishment.awards.$.awardedBy":"KAMu"}},{"upsert":true})
+//Update Accomplishment -> Awards->Year
+db.demo.update( {"userName":"dip95","profile.accomplishment.awards.year":"Oracle"},{$set:{"profile.accomplishment.awards.$.year":"KAMu"}},{"upsert":true})
+
+
+
+
+//Update Accomplishment -> Publications->Published_by
+db.demo.update( {"userName":"dip95","profile.accomplishment.publications.publishedBy":"Oracle"},{$set:{"profile.accomplishment.publications.$.publishedBy":"KAMu"}},{"upsert":true})
+//Update Accomplishment -> Publications->Topic
+db.demo.update( {"userName":"dip95","profile.accomplishment.publications.topic":"Oracle"},{$set:{"profile.accomplishment.publications.$.topic":"KAMu"}},{"upsert":true})
+
+//Update Accomplishment -> Publications-> Name
+db.demo.update( {"userName":"dip95","profile.accomplishment.publications.name":5},{$set:{"profile.accomplishment.publications.$.name":"Dip"}},{"upsert":true})
+//Update Accomplishment -> Publications-> Year
+db.demo.update( {"userName":"dip95","profile.accomplishment.publications.year":"2017"},{$set:{"profile.accomplishment.publications.$.year":"2056"}},{"upsert":true})
+
+
+
+
+//Update Accomplishment -> Certifications->Issued_By
+db.demo.update( {"userName":"dip95","profile.accomplishment.certifications.issuedBy":"Oracle"},{$set:{"profile.accomplishment.certifications.$.issuedBy":"KAMu"}},{"upsert":true})
+//Update Accomplishment -> Certifications-> Name
+db.demo.update( {"userName":"dip95","profile.accomplishment.certifications.name":"ASD"},{$set:{"profile.accomplishment.certifications.$.name":"Pawan"}},{"upsert":true})
+//Update Accomplishment -> Certifications-> Year
+db.demo.update( {"userName":"dip95","profile.accomplishment.certifications.year":"2017"},
+{$set:{"profile.accomplishment.certifications.$.year":"2056"}},{"upsert":true})
+
+
+//Update Skills -> Skills
+db.demo.update({"userName":"dip95"},{ $pull: { "profile.skills": { $in: [ "Java" ] } } })
