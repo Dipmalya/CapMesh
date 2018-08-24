@@ -108,12 +108,15 @@ DAO layer
 -----------------
 
 const mongoose = require("mongoose");
-const User = require("./user.js");              //schema is in user.js file
+const User = require("./user.js");                    //the schema is in user.js file
 
+//this will fire the query..
 var getUserById = function(objFind) {
   var result = User.find(objFind);
-  return result;                                       //returns promise
+  return result;
 };
+
+module.exports = getUserById;
 
 ====================================================================
 
@@ -121,14 +124,18 @@ Controller layer
 ------------------
 const call = require("./mongooseDemo");
 
+//this will be the controller... which will take the params and frame the query..
 var callQuery = function(userName) {
   var objQuery = '{"userName":"' + userName + '"}';
-  var query = call(JSON.parse(objQuery));
-  query.then(result => {
-    console.log(result);
-  });
+  var promise = call(JSON.parse(objQuery));
+  return promise;
 };
 
-var x = (function() {
-  callQuery("dip95");
+//this will be called from the routes only...
+var expressGetCall = (function() {
+  var handlePromise = callQuery("dip95");
+  handlePromise.then(result => {
+    console.log(result);
+    //res.send(result);
+  });
 })();
