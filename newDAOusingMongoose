@@ -124,10 +124,10 @@ const call = require("./mongooseDemo");                   //where dao is kept..
 var callQuery = function(userName) {
   var objQuery = '{"userName":"' + userName + '"}';
   var query = call(JSON.parse(objQuery));
-  query.exec(function(err, jedis) {
+  query.exec(function(err, rows) {
     if (err) return console.log(err);
-    jedis.forEach(function(jedi) {
-      console.log(jedi);
+    rows.forEach(function(result) {
+      console.log(result);
     });
   });
 };
