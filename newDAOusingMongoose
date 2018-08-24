@@ -119,19 +119,16 @@ var getUserById = function(objFind) {
 
 Controller layer
 ------------------
-const call = require("./mongooseDemo");                   //where dao is kept..
+const call = require("./mongooseDemo");
 
 var callQuery = function(userName) {
   var objQuery = '{"userName":"' + userName + '"}';
   var query = call(JSON.parse(objQuery));
-  query.exec(function(err, rows) {
-    if (err) return console.log(err);
-    rows.forEach(function(result) {
-      console.log(result);
-    });
+  query.then(result => {
+    console.log(result);
   });
 };
 
 var x = (function() {
-    callQuery("dip95");
+  callQuery("dip95");
 })();
